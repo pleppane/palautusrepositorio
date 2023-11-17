@@ -7,47 +7,29 @@ class IntJoukko:
     def _luo_lista(self, koko):
         return [0] * koko
     
-    def __init__(self, kapasiteetti=None, kasvatuskoko=None):
-        if kapasiteetti is None:
-            self.kapasiteetti = KAPASITEETTI
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
+    def __init__(self, 
+                kapasiteetti :int =KAPASITEETTI,
+                kasvatuskoko :int =OLETUSKASVATUS):
+        if kapasiteetti < 0:
             raise Exception("Väärä kapasiteetti")  # heitin vaan jotain :D
-        else:
-            self.kapasiteetti = kapasiteetti
-
-        if kasvatuskoko is None:
-            self.kasvatuskoko = OLETUSKASVATUS
-        elif not isinstance(kapasiteetti, int) or kapasiteetti < 0:
+        elif kasvatuskoko < 0:
             raise Exception("kapasiteetti2")  # heitin vaan jotain :D
-        else:
-            self.kasvatuskoko = kasvatuskoko
 
+        self.kapasiteetti = kapasiteetti
+        self.kasvatuskoko = kasvatuskoko
         self.ljono = self._luo_lista(self.kapasiteetti)
 
         self.alkioiden_lkm = 0
 
-    def kuuluu(self, n):
-        on = 0
 
+    def kuuluu(self, n):
         for i in range(0, self.alkioiden_lkm):
             if n == self.ljono[i]:
-                on = on + 1
+                return True
+        return False
 
-        if on > 0:
-            return True
-        else:
-            return False
 
     def lisaa(self, n):
-        ei_ole = 0
-
-        if self.alkioiden_lkm == 0:
-            self.ljono[0] = n
-            self.alkioiden_lkm = self.alkioiden_lkm + 1
-            return True
-        else:
-            pass
-
         if not self.kuuluu(n):
             self.ljono[self.alkioiden_lkm] = n
             self.alkioiden_lkm = self.alkioiden_lkm + 1
@@ -64,25 +46,17 @@ class IntJoukko:
         return False
 
     def poista(self, n):
-        kohta = -1
-        apu = 0
+        if not self.kuuluu(n):
+            return False
 
-        for i in range(0, self.alkioiden_lkm):
-            if n == self.ljono[i]:
-                kohta = i  # siis luku löytyy tuosta kohdasta :D
-                self.ljono[kohta] = 0
-                break
+        zap = 0;
+        while self.ljono[zap]!=n:
+            zap+=1;
+        self.alkioiden_lkm -= 1
+        for i in range(zap, self.alkioiden_lkm):
+            self.ljono[i] = self.ljono[i + 1]
 
-        if kohta != -1:
-            for j in range(kohta, self.alkioiden_lkm - 1):
-                apu = self.ljono[j]
-                self.ljono[j] = self.ljono[j + 1]
-                self.ljono[j + 1] = apu
-
-            self.alkioiden_lkm = self.alkioiden_lkm - 1
-            return True
-
-        return False
+        return True
 
     def kopioi_lista(self, a, b):
         for i in range(0, len(a)):
@@ -141,15 +115,10 @@ class IntJoukko:
         return z
 
     def __str__(self):
-        if self.alkioiden_lkm == 0:
-            return "{}"
-        elif self.alkioiden_lkm == 1:
-            return "{" + str(self.ljono[0]) + "}"
-        else:
-            tuotos = "{"
-            for i in range(0, self.alkioiden_lkm - 1):
-                tuotos = tuotos + str(self.ljono[i])
-                tuotos = tuotos + ", "
-            tuotos = tuotos + str(self.ljono[self.alkioiden_lkm - 1])
-            tuotos = tuotos + "}"
-            return tuotos
+        txt='{'
+        for i in range(0, self.alkioiden_lkm):
+            txt+=str(self.ljono[i])
+            if i+1<self.alkioiden_lkm:
+                txt+=', '
+        txt+='}'
+        return txt
