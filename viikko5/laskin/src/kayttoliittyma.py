@@ -33,7 +33,7 @@ class Kumoa(Lasku):
         super().__init__(sovelluslogiikka, syotteenlukija)
 
     def suorita(self):
-        pass
+        self._sovellus.kumoa()
 
 class Komento(Enum):
     SUMMA = 1
@@ -51,7 +51,7 @@ class Kayttoliittyma:
             Komento.SUMMA: Summa(self._sovellus, self._lue_syote),
             Komento.EROTUS: Erotus(self._sovellus, self._lue_syote),
             Komento.NOLLAUS: Nollaus(self._sovellus, self._lue_syote),
-            Komento.KUMOA: Kumoa(self._sovellus, self._lue_syote) # ei ehkä tarvita täällä...
+            Komento.KUMOA: Kumoa(self._sovellus, self._lue_syote)
         }
         
     def _lue_syote(self):
