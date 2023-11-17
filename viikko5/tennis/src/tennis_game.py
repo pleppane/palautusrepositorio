@@ -1,55 +1,32 @@
 class TennisGame:
     def __init__(self, player1_name, player2_name):
-        self.player1_name = player1_name
-        self.player2_name = player2_name
-        self.m_score1 = 0
-        self.m_score2 = 0
-
+        self.players = [player1_name, player2_name]
+        self.scores = [0, 0]
+       
     def won_point(self, player_name):
-        if player_name == "player1":
-            self.m_score1 = self.m_score1 + 1
-        else:
-            self.m_score2 = self.m_score2 + 1
+        if player_name == self.players[0]:
+            self.scores[0] += 1
+        elif player_name == self.players[1]:
+            self.scores[1] += 1
+            
 
     def get_score(self):
-        score = ""
-        temp_score = 0
-
-        if self.m_score1 == self.m_score2:
-            if self.m_score1 == 0:
-                score = "Love-All"
-            elif self.m_score1 == 1:
-                score = "Fifteen-All"
-            elif self.m_score1 == 2:
-                score = "Thirty-All"
+        point_names = ('Love', 'Fifteen', 'Thirty', 'Forty' )
+        specials = {	(0,0): "Love-All",	(1,1): "Fifteen-All",
+                        (2,2): "Thirty-All",	(3,3): "Deuce",
+                        (4,4): "Deuce"	}
+        
+        if tuple(self.scores) in specials:
+            text = specials[tuple(self.scores)]
+            
+        elif self.scores[0] > 3 or self.scores[1] > 3:
+            if abs( self.scores[0] - self.scores[1] ) > 1:
+                text = "Win for player"
             else:
-                score = "Deuce"
-        elif self.m_score1 >= 4 or self.m_score2 >= 4:
-            minus_result = self.m_score1 - self. m_score2
-
-            if minus_result == 1:
-                score = "Advantage player1"
-            elif minus_result == -1:
-                score = "Advantage player2"
-            elif minus_result >= 2:
-                score = "Win for player1"
-            else:
-                score = "Win for player2"
+                text = "Advantage player"
+            text += "1" if ( self.scores[0] > self.scores[1] ) else "2"
+            
         else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.m_score1
-                else:
-                    score = score + "-"
-                    temp_score = self.m_score2
+            text=f"{point_names[self.scores[0]]}-{point_names[self.scores[1]]}"
 
-                if temp_score == 0:
-                    score = score + "Love"
-                elif temp_score == 1:
-                    score = score + "Fifteen"
-                elif temp_score == 2:
-                    score = score + "Thirty"
-                elif temp_score == 3:
-                    score = score + "Forty"
-
-        return score
+        return text
