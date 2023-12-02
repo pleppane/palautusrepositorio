@@ -66,3 +66,19 @@ class Or:
 
         return False
 
+
+class QueryBuilder:
+    def __init__(self, query = All()):
+        self.query = query
+        
+    def playsIn(self, team):
+        return QueryBuilder(And(PlaysIn(team),self.query))
+        
+    def hasAtLeast(self, value, attr):
+        return QueryBuilder(And(HasAtLeast(value,attr),self.query))
+
+    def hasFewerThan(self, value, attr):
+        return QueryBuilder(And(HasFewerThan(value,attr),self.query))
+        
+    def build(self):
+        return self.query
